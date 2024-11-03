@@ -4,11 +4,15 @@ import java.util.Objects;
 
 public class PaperBook extends Book{
 
-    private final Cover COVER_TYPE;
+    private Cover COVER_TYPE = Cover.Hardcover;
     private String publisher = "Unknown";
 
-    public PaperBook(String title, String author, int pageNumber, double price, Cover coverType) {
+    public PaperBook(String title, String author, int pageNumber, double price) {
         super(title, author, pageNumber, price);
+    }
+
+    public PaperBook(String title, String author, int pageNumber, double price, Cover coverType) {
+        this(title, author, pageNumber, price);
         COVER_TYPE = coverType;
     }
 

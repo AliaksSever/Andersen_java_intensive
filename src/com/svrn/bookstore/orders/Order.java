@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class Order<T extends Book> {
+    private static int ID_COUNTER = 1;
+
     private long ID;
     private final List<T> items = new LinkedList<>();
     private Status status;
@@ -23,12 +25,14 @@ public class Order<T extends Book> {
         this.status = Status.Opened;
         openingTimeStamp = Instant.now();
         CountTotalPrice();
+        ID=ID_COUNTER++;
     }
     public Order(List<T> items) {
         this.items.addAll(items);
         this.status = Status.Opened;
         openingTimeStamp = Instant.now();
         CountTotalPrice();
+        ID=ID_COUNTER++;
     }
 
     public Order(T item, ReceiveType receiveType) {
@@ -37,6 +41,7 @@ public class Order<T extends Book> {
         openingTimeStamp = Instant.now();
         this.receiveType = receiveType;
         CountTotalPrice();
+        ID=ID_COUNTER++;
     }
     public Order(List<T> items, ReceiveType receiveType) {
         this.items.addAll(items);
@@ -44,6 +49,7 @@ public class Order<T extends Book> {
         openingTimeStamp = Instant.now();
         this.receiveType = receiveType;
         CountTotalPrice();
+        ID=ID_COUNTER++;
     }
 
     public Order(T item, double discount) {
@@ -52,6 +58,7 @@ public class Order<T extends Book> {
         openingTimeStamp = Instant.now();
         this.discount = discount;
         CountTotalPrice();
+        ID=ID_COUNTER++;
     }
     public Order(List<T> items, double discount) {
         this.items.addAll(items);
@@ -59,6 +66,7 @@ public class Order<T extends Book> {
         openingTimeStamp = Instant.now();
         this.discount = discount;
         CountTotalPrice();
+        ID=ID_COUNTER++;
     }
 
     public Order(T item, ReceiveType receiveType, double discount) {
@@ -68,6 +76,7 @@ public class Order<T extends Book> {
         this.receiveType = receiveType;
         this.discount = discount;
         CountTotalPrice();
+        ID=ID_COUNTER++;
     }
     public Order(List<T> items, ReceiveType receiveType, double discount) {
         this.items.addAll(items);
@@ -76,6 +85,7 @@ public class Order<T extends Book> {
         this.receiveType = receiveType;
         this.discount = discount;
         CountTotalPrice();
+        ID=ID_COUNTER++;
     }
 
     public long getID() {
