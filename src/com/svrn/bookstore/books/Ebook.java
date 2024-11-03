@@ -1,5 +1,9 @@
 package com.svrn.bookstore.books;
 
+import com.svrn.bookstore.orders.Order;
+
+import java.util.Objects;
+
 public class Ebook extends Book{
 
     private double fileSize;
@@ -26,5 +30,20 @@ public class Ebook extends Book{
                 ", type: Ebook"+
                 ", fileSize: " + fileSize+
                 "}.";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (super.equals(o)) {
+            Ebook ebook = (Ebook) o;
+            return fileSize == ebook.getFileSize();
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), fileSize);
     }
 }

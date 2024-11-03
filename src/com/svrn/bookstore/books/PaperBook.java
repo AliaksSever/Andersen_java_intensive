@@ -1,9 +1,11 @@
 package com.svrn.bookstore.books;
 
+import java.util.Objects;
+
 public class PaperBook extends Book{
 
-    public final Cover COVER_TYPE;
-    public String publisher;
+    private final Cover COVER_TYPE;
+    private String publisher = "Unknown";
 
     public PaperBook(String title, String author, int pageNumber, double price, Cover coverType) {
         super(title, author, pageNumber, price);
@@ -22,11 +24,31 @@ public class PaperBook extends Book{
         this.publisher = publisher;
     }
 
+    public Cover getCOVER_TYPE() {
+        return COVER_TYPE;
+    }
+
     @Override
     public String toString() {
         return super.toString() +
                 ", type: " + COVER_TYPE+
                 ", publisher: " + publisher+
                 "}.";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (super.equals(o)) {
+            PaperBook paperBook = (PaperBook) o;
+            return COVER_TYPE == paperBook.getCOVER_TYPE() &&
+                    publisher.equals(paperBook.getPublisher());
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), COVER_TYPE, publisher);
     }
 }

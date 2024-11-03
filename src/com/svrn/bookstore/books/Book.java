@@ -1,6 +1,8 @@
 package com.svrn.bookstore.books;
 
-public abstract class Book {
+import java.util.Objects;
+
+public abstract class Book implements Comparable<Book>{
     private String title;
     private String author;
     private double price;
@@ -37,7 +39,7 @@ public abstract class Book {
     public double getPrice() {
         return price;
     }
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -48,5 +50,26 @@ public abstract class Book {
                 ", author: "+author+
                 ", price: "+price+
                 ", pages: "+pageNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass()!=o.getClass()) return false;
+        Book book = (Book) o;
+        return title.equals(book.getTitle()) &&
+                author.equals(book.getAuthor()) &&
+                price == book.getPrice() &&
+                pageNumber == book.pageNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, author, price, pageNumber);
+    }
+
+    @Override
+    public int compareTo(Book book) {
+        return toString().compareTo(book.toString());
     }
 }
