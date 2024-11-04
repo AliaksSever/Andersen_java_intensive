@@ -1,59 +1,81 @@
 package com.svrn.bookstore.utils;
 
+import java.util.*;
+
+import com.svrn.bookstore.items.Item;
 import com.svrn.bookstore.orders.Order;
 import com.svrn.bookstore.orders.Status;
-import com.svrn.bookstore.books.Book;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class OrderManager{
 
-    private static final Map<Long, Order<Book>> ORDER_LIST = new HashMap<>();
+    private static final Map<Long, Order> ORDERS = new HashMap<>();
 
-    private static final String OPEN_ORDER_MESSAGE = "Order has been opened";
-    private static final String CLOSE_ORDER_MESSAGE = "Order has been closed";
-    private static final String COMPLETE_ORDER_MESSAGE = "Order has been completed";
+    public static final String OPEN_ORDER_MESSAGE = Status.OPENED.getMessage();
+    public static final String CLOSE_ORDER_MESSAGE = Status.CLOSED.getMessage();
+    public static final String COMPLETE_ORDER_MESSAGE = Status.COMPLETED.getMessage();
+
+    public static final String OPENED_STATUS = Status.OPENED.getStatusDescription();
+    public static final String CLOSED_STATUS = Status.CLOSED.getStatusDescription();
+    public static final String COMPLETED_STATUS = Status.COMPLETED.getStatusDescription();
 
     private OrderManager() {}
-
-    public static Order<Book> createOrder(Book book) {
-        Order<Book> order = new Order<>(book);
-        printMessage(OPEN_ORDER_MESSAGE);
-        return order;
-    }
-    public static Order<Book> createOrder(List<Book> bookList) {
-        Order<Book> order = new Order<>(bookList);
-        ORDER_LIST.put(order.getID(), order);
-        printMessage(OPEN_ORDER_MESSAGE);
-        return order;
-    }
-
-    public static Order<Book> closeOrder(Order<Book> order) {
-        if (order.getStatus() == Status.Opened) {
-            Order<Book> closedOrder = ORDER_LIST.get(order.getID());
-            closedOrder.setStatus(Status.Closed);
-            printMessage(CLOSE_ORDER_MESSAGE);
-            return order;
-        }
-    }
-
-    public static Order<Book> completeOrder(Order<Book> order) {
-        if (order.getStatus() == Status.Opened) {
-            Order<Book> completedOrder = ORDER_LIST.get(order.getID());
-            completedOrder.setStatus(Status.Completed);
-            printMessage(COMPLETE_ORDER_MESSAGE);
-            return order;
-        }
-    }
 
     public static void printMessage(String message) {
         System.out.println(message);
     }
 
-    public static Map<Long, Order<Book>> getOrderList() {
-        return ORDER_LIST;
+    public static Map<Long, Order> getOrders() {
+        return ORDERS;
     }
+
+    public static Order getOrder(long orderId){
+        return ORDERS.get(orderId);
+    }
+
+    public static <T extends Item> void openOrder(List<T> items) {
+        Order<T> newOrder = new Order<>(items);
+        ORDERS.put(newOrder.getID(), newOrder);
+        printMessage(OPEN_ORDER_MESSAGE + " with ID: " + newOrder.getID());
+    }
+    public static <T extends Item> boolean closeOrder(long orderId) {
+        Order<T> order = ORDERS.get(orderId);
+        if (order != null && order.getStatus().getStatusDescription().equals(OPENED_STATUS)) {
+            order.setStatus(Status.CLOSED);
+            printMessage(CLOSE_ORDER_MESSAGE);
+            return true;
+        }
+        return false;
+    }
+    public static <T extends Item> boolean completeOrder(long orderId) {
+        Order<T> order = ORDERS.get(orderId);
+        if (order != null && order.getStatus().getStatusDescription().equals(OPENED_STATUS)) {
+            order.setStatus(Status.COMPLETED);
+            printMessage(COMPLETE_ORDER_MESSAGE);
+            return true;
+        }
+        return false;
+    }
+
+    public static void showOrders() {
+        List<Order> orders = new ArrayList<>(ORDERS.values());
+        orders.sort(
+                new OrderComparator().
+                        thenComparing(Order::getTotalPrice).
+                        thenComparing(Order::getOpenTime).
+                        thenComparing(Order::getCloseTime).
+                        thenComparing(Order::getStatus)
+        );
+        for (Order order: orders) {
+            System.out.println(order);
+        }
+    }
+
+    public static class OrderComparator implements Comparator<Order> {
+        @Override
+        public int compare(Order order1, Order order2) {
+            return Long.compare(order1.getID(), order2.getID());
+        }
+    }
+
 
 }
