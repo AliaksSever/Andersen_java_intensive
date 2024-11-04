@@ -32,10 +32,11 @@ public class OrderManager{
         return ORDERS.get(orderId);
     }
 
-    public static <T extends Item> void openOrder(List<T> items) {
+    public static <T extends Item> Order openOrder(List<T> items) {
         Order<T> newOrder = new Order<>(items);
         ORDERS.put(newOrder.getID(), newOrder);
         printMessage(OPEN_ORDER_MESSAGE + " with ID: " + newOrder.getID());
+        return newOrder;
     }
     public static <T extends Item> boolean closeOrder(long orderId) {
         Order<T> order = ORDERS.get(orderId);

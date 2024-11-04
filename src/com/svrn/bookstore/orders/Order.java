@@ -75,6 +75,12 @@ public class Order<T extends Item> implements Generable{
         this.status = status;
     }
 
+    public void showOrder() {
+        for (Map.Entry<Long, T> item: items.entrySet()) {
+            System.out.println(item.getValue());
+        }
+    }
+
     @Override
     public String toString() {
         return "Order{"+
